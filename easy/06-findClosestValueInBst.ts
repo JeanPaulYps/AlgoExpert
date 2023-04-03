@@ -21,17 +21,13 @@ export function findClosestValueInBst(tree: BST, target: number) {
   };
   while (node !== null) {
     const distance = Math.abs(node.value - target);
-    if (distance < answer.distance ) {
-        answer = {
-            value: node.value,
-            distance,
-        }
+    if (distance < answer.distance) {
+      answer = {
+        value: node.value,
+        distance,
+      };
     }
-    if (target > node.value) {
-        node = node.right;
-    } else {
-        node = node.left;
-    }
+    node = target > node.value ? node.right : node.left;
   }
 
   return answer.value;
