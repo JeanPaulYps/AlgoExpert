@@ -1,3 +1,5 @@
+// Instructions: O(log(n))
+// Memory: O(log(n))
 class BST {
   value: number;
   left: BST | null;

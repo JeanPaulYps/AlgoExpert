@@ -1,4 +1,5 @@
-
+// Instructions: O(n*ln(n))
+// Memory: O(n)
 export function nonConstructibleChange(coins: number[]) {
   // Write your code here.
   const sortedCoins = coins.sort((number1, number2) => number1 - number2);
