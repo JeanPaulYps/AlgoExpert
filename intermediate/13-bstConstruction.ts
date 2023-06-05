@@ -73,6 +73,12 @@ export class BST {
     return { parent, node };
   }
 
+  swap(firstNode: BST, secondNode: BST) {
+    firstNode.value = secondNode.value;
+    firstNode.right = secondNode.right;
+    firstNode.left = secondNode.left;
+  }
+
   removeNode(node: BST, parent: BST) {
     const value = node.value;
     // Case 1: has no children
@@ -87,70 +93,29 @@ export class BST {
         if (parent?.left?.value === node.value) parent.left = onlyChild;
         else parent.right = onlyChild;
       } else {
-        if (node.right) {
-          this.value = node.right.value;
-          this.right = node.right.right;
-          this.left = node.right.left;
-        }
-        if (node.left) {
-          this.value = node.left.value;
-          this.right = node.left.right;
-          this.left = node.left.left;
-        }
+        if (node.right) this.swap(this, node.right);
+
+        if (node.left) this.swap(this, node.left);
       }
     }
   }
 
   remove(value: number): BST {
-    let parent: BST = this;
-    let node: BST | null = this;
-
-    while (node) {
-      if (value === node.value) {
-        node = node;
-        break;
-      } else if (value < node.value) {
-        parent = node;
-        node = node.left;
-      } else {
-        parent = node;
-        node = node.right;
-      }
-    }
+    const { node, parent } = this.search(this, value);
 
     if (!node) return this;
 
-    // Case 3: has two children
+    // Case: has two children
     if (node.right && node.left) {
       const { node: predecessorNode, parent: predecessorParent } =
         this.findMinimum(node);
-      const predecesorValue = predecessorNode.value;
+      const predecessorValue = predecessorNode.value;
       this.removeNode(predecessorNode, predecessorParent);
-      node.value = predecesorValue;
+      node.value = predecessorValue;
     }
-    // Case 1: has no children
-    else if (!node.left && !node.right) {
-      if (value < parent.value) parent.left = null;
-      else parent.right = null;
-    }
-    // Case 2: has one children
+    // Case: has one or none children
     else {
-      const onlyChild = node?.left ? node.left : node.right;
-      if (node !== this) {
-        if (parent?.left?.value === node.value) parent.left = onlyChild;
-        else parent.right = onlyChild;
-      } else {
-        if (node.right) {
-          this.value = node.right.value;
-          this.right = node.right.right;
-          this.left = node.right.left;
-        }
-        if (node.left) {
-          this.value = node.left.value;
-          this.right = node.left.right;
-          this.left = node.left.left;
-        }
-      }
+      this.removeNode(node, parent);
     }
 
     // Do not edit the return statement of this method.
